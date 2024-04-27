@@ -1,5 +1,5 @@
 # Use the official Python image as base
-FROM python:3.7
+FROM python:3.10.9
 
 # Set the working directory in the container
 WORKDIR /app
@@ -7,8 +7,11 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 ADD . /app
 
-# Install dependencies
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pycaret joblib
+
+
+RUN pip install --force-reinstall -r requirements.txt
+
 
 # Expose port 
 ENV PORT 8080

@@ -21,11 +21,9 @@ async def predict(N: float, P: float, K: float, temperature: float, humidity: fl
                                    'ph': [ph],
                                    'rainfall': [rainfall]})
     prediction = predict_model(model, data=input_features)
-    predicted_label = prediction.iloc[0]['prediction_label']  # Assuming the column name for the prediction is 'Label'
+    predicted_label = prediction.iloc[0]['Label']  # Assuming the column name for the prediction is 'Label'
     return {"prediction": predicted_label}
 
 # Run the FastAPI app with uvicorn
 if __name__ == '__main__':
-    import nest_asyncio
-    nest_asyncio.apply()
-    app.run(host="0.0.0.0", port=8080)
+    uvicorn.run(app, host="0.0.0.0", port=8080)
