@@ -28,4 +28,4 @@ async def predict(N: float, P: float, K: float, temperature: float, humidity: fl
 if __name__ == '__main__':
     import nest_asyncio
     nest_asyncio.apply()
-    app.run(host="0.0.0.0", port=config.PORT, debug=config.DEBUG_MODE)
+    app.run(host="0.0.0.0", port=8080)
