@@ -1,14 +1,21 @@
 # Use the official Python image as base
 FROM python:3.10.9
 
-# Install Streamlit
-RUN pip install streamlit
+# Set the working directory in the container
+WORKDIR /app
 
-# Copy your Streamlit app script into the container
-COPY CYPUI.py /
+# Copy the Streamlit app script into the container
+COPY CYPUI.py /app/
 
-# Expose port 8501 (Streamlit default port)
+# Update pip and install Streamlit
+RUN pip install --upgrade pip && \
+    pip install streamlit
+
+# Expose port 8501 for Streamlit
 EXPOSE 8501
 
-# Command to run the Streamlit app using the Streamlit CLI
-CMD ["streamlit", "run", "--server.port", "8080", "CYPUI.py"]
+# Healthcheck to ensure Streamlit server is running
+HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
+
+# Set the entrypoint to run the Streamlit app
+ENTRYPOINT ["streamlit", "run", "CYPUI.py", "--server.port=8501", "--server.address=0.0.0.0"]
