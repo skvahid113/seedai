@@ -5,7 +5,7 @@ FROM python:3.10.9
 RUN pip install streamlit
 
 # Copy your Streamlit app script into the container
-COPY app.py /
+COPY CYPUI.py /
 
 # Expose port 8501 (Streamlit default port)
 EXPOSE 8501
