@@ -12,10 +12,7 @@ RUN pip install --upgrade pip && \
     pip install streamlit
 
 # Expose port 8501 for Streamlit
-EXPOSE 8501
-
-# Healthcheck to ensure Streamlit server is running
-HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
+EXPOSE 8080
 
 # Set the entrypoint to run the Streamlit app
-ENTRYPOINT ["streamlit", "run", "CYPUI.py", "--server.port=8501", "--server.address=0.0.0.0"]
+ENTRYPOINT ["streamlit", "run", "CYPUI.py", "--server.port=8080", "--server.address=0.0.0.0"]
