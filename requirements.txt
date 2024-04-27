@@ -1,2 +1,4 @@
 pycaret
 pandas
+fastapi
+uvicorn
