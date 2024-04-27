@@ -7,14 +7,11 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 ADD . /app
 
-RUN pip install --upgrade pycaret joblib
-
-
-RUN pip install --force-reinstall -r requirements.txt
+RUN pip install --force-reinstall -r requirements-UI.txt
 
 
 # Expose port 
 ENV PORT 8080
 
 # Run the application:
-CMD ["python", "-m", "app"]
+CMD ["python", "-m", "CYPUI"]
