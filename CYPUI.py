@@ -27,7 +27,6 @@ crop_names = {
     21: 'watermelon'
 }
 
-
 # Additional information about each crop
 crop_info = {
     'rice': 'Rice is a staple food for more than half of the world\'s population, providing essential nutrients and energy. It is consumed in various forms and is a significant source of carbohydrates.',
@@ -54,6 +53,9 @@ crop_info = {
     'coffee': 'Coffee is one of the most popular beverages in the world, prized for its rich flavor, aroma, and caffeine content. It is made from roasted coffee beans and is enjoyed by millions of people worldwide as a morning pick-me-up or a social drink.'
 }
 
+# Display the title
+st.markdown("<h1 class='title'>Crop Prediction</h1>", unsafe_allow_html=True)
+
 # Define the Streamlit app
 def main():
     st.markdown("""
@@ -61,62 +63,137 @@ def main():
     /* Center-align the title */
     .title {
         text-align: center;
-        color: #ff5733; /* Change the color to your preferred color */
+        color: #2C3E50; /* Dark blue color for title */
+        font-size: 36px; /* Increase font size for title */
+        font-weight: bold; /* Make title bold */
+        margin-bottom: 30px; /* Add margin for spacing */
+    }
+    
+    /* Style for predicted crop */
+    .predicted-crop {
+        font-size: 28px; /* Decrease font size for predicted crop */
+        color: #27AE60; /* Green color for predicted crop */
+        text-align: center;
+        margin-top: 20px; /* Add margin for spacing */
+    }
+    
+    /* Style for crop description */
+    .crop-description {
+        font-size: 16px; /* Decrease font size for crop description */
+        color: #34495E; /* Dark gray color for crop description */
+        text-align: center;
+        margin-top: 20px; /* Add margin for spacing */
+        background-color: #EAEDED; /* Light gray background for crop description */
+        padding: 20px; /* Add padding for spacing */
+        border-radius: 10px; /* Add border radius for rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+    }
+    
+    /* Style for sidebar header */
+    .sidebar-header {
+        font-size: 20px; /* Increase font size for sidebar header */
+        color: #333333; /* Dark gray color for sidebar header */
+        margin-bottom: 15px; /* Add margin for spacing */
+    }
+    
+    /* Style for sidebar input fields */
+    .sidebar-input {
+        margin-bottom: 25px; /* Add margin for spacing */
+    }
+    
+    /* Style for range messages */
+    .range-message {
+        font-size: 14px; /* Decrease font size for range messages */
+        margin-top: 5px; /* Add margin for spacing */
+    }
+    
+    /* Style for predict button */
+    .predict-button {
+        background-color: #2980B9; /* Blue color for predict button */
+        color: white; /* White text color for predict button */
+        font-size: 18px; /* Increase font size for predict button */
+        font-weight: bold; /* Make predict button text bold */
+        padding: 10px 20px; /* Add padding for predict button */
+        border-radius: 5px; /* Add border radius for rounded corners */
+        margin-top: 20px; /* Add margin for spacing */
+        text-align: center; /* Center-align the text */
+        cursor: pointer; /* Change cursor to pointer */
+        width: 100%; /* Set button width to 100% */
+    }
+    
+    /* Hover effect for predict button */
+    .predict-button:hover {
+        background-color: #3498DB; /* Darker blue color on hover */
     }
     </style>
     """, unsafe_allow_html=True)
 
-# Display the title
-    st.markdown("<h1 class='title'>Crop Yield Prediction</h1>", unsafe_allow_html=True)
-
-
     # Add input fields for user to enter data
-    st.sidebar.header('Enter Data:')
-    N_info = "Nitrogen (N) is a crucial nutrient for plant growth and development. It helps in the formation of proteins, enzymes, and chlorophyll."
-    N = st.sidebar.number_input('Nitrogen (N) ', min_value=0, help=N_info)
+    st.sidebar.markdown("<h3 class='sidebar-header'>Select Parameters:</h3>", unsafe_allow_html=True)
 
+    # Define information tooltips for each input field
+    N_info = "Nitrogen (N) is a crucial nutrient for plant growth and development. It aids in the formation of proteins, enzymes, and chlorophyll."
     P_info = "Phosphorus (P) is important for photosynthesis, energy transfer, and the development of roots and flowers."
-    P = st.sidebar.number_input('Phosphorus (P)  ', min_value=0, help=P_info)
-
     K_info = "Potassium (K) is essential for plant growth and plays a key role in regulating water uptake and photosynthesis."
-    K = st.sidebar.number_input('Potassium (K)  ', min_value=0, help=K_info)
-
     temperature_info = "Temperature affects plant metabolism and growth rates. Different crops have specific temperature requirements for optimal growth."
-    temperature = st.sidebar.number_input('Temperature  ', min_value=0.0, help=temperature_info)
-
     humidity_info = "Humidity influences transpiration rates and water uptake by plants. It can affect plant health and susceptibility to diseases."
-    humidity = st.sidebar.number_input('Humidity  ', min_value=0.0, help=humidity_info)
+    ph_info = "The pH level of the soil affects nutrient availability to plants. Most crops grow best in slightly acidic to neutral soils."
+    rainfall_info = "Rainfall provides essential water for plant growth. Insufficient or excessive rainfall can adversely affect crop yield."
 
-    ph_info = "pH level of the soil affects nutrient availability to plants. Most crops grow best in slightly acidic to neutral soils."
-    ph = st.sidebar.number_input('pH  ', min_value=0.0, help=ph_info)
+    # Define the input fields with appropriate ranges and tooltips
+    col1, col2 = st.sidebar.columns(2)
+    with col1:
+        N = st.slider('Nitrogen (N) (mg/Kg or mg/L)', min_value=0, max_value=140, value=0, help=N_info, key='N')
+        st.markdown("<p class='range-message'>Acceptable range: 0-140</p>", unsafe_allow_html=True)
+        P = st.slider('Phosphorus (P) (mg/Kg or mg/L)', min_value=5, max_value=145, value=5, help=P_info, key='P')
+        st.markdown("<p class='range-message'>Acceptable range: 5-145</p>", unsafe_allow_html=True)
+        K = st.slider('Potassium (K) (mg/Kg or mg/L)', min_value=5, max_value=205, value=5, help=K_info, key='K')
+        st.markdown("<p class='range-message'>Acceptable range: 5-205</p>", unsafe_allow_html=True)
+    with col2:
+        temperature = st.slider('Temperature (°C)', min_value=2, max_value=44, value=2, help=temperature_info, key='temperature')
+        st.markdown("<p class='range-message'>Acceptable range: 2-44°C</p>", unsafe_allow_html=True)
+        humidity = st.slider('Humidity (% RH)', min_value=14, max_value=100, value=14, help=humidity_info, key='humidity')
+        st.markdown("<p class='range-message'>Acceptable range: 14%-100%</p>", unsafe_allow_html=True)
+        ph = st.slider('pH', min_value=3.5, max_value=10.0, value=3.5, help=ph_info, key='ph')
+        st.markdown("<p class='range-message'>Acceptable range: 3.5-10.0</p>", unsafe_allow_html=True)
+        rainfall = st.slider('Rainfall (mm)', min_value=20, max_value=300, value=20, help=rainfall_info, key='rainfall')
+        st.markdown("<p class='range-message'>Acceptable range: 20-300 mm</p>", unsafe_allow_html=True)
 
-    rainfall_info = "Rainfall provides water essential for plant growth. Insufficient or excessive rainfall can affect crop yield."
-    rainfall = st.sidebar.number_input('Rainfall  ', min_value=0.0, help=rainfall_info)
-
-    # Add input fields for other parameters
-
-    # When the user clicks the 'Predict' button, perform prediction
-    if st.sidebar.button('Predict'):
-        # Send HTTP request to FastAPI server
-        response = requests.post("http://34.170.154.42/predict",
-                                params={"N": N, "P": P, "K": K,
-                                        "temperature": temperature,
-                                        "humidity": humidity, "ph": ph,
-                                        "rainfall": rainfall})
-        if response.status_code == 200:
-            predicted_yield = response.json()["prediction"]
-            # Map predicted label to crop name
-            predicted_crop = crop_names.get(predicted_yield)
-            if predicted_crop is not None:
-               
-                st.markdown(f'<font size="+8">**Predicted Crop: <font size="+20" color="#85FFBD">{predicted_crop}</font>**</font>', unsafe_allow_html=True)
-                st.write(f'<font size="+10" color="#1A42CE">Description:  {crop_info.get(predicted_crop, "No additional information available.")}</font>', unsafe_allow_html=True)
-
-                # Print input values for other parameters
-            else:
-                st.error("Failed to map prediction to crop name.")
+    # Style the predict button
+    if st.sidebar.button('Predict', key='predict_button'):
+        if N < 0 or N > 140:
+            st.sidebar.error("Nitrogen (N) value must be between 0 and 140.")
+        elif P < 5 or P > 145:
+            st.sidebar.error("Phosphorus (P) value must be between 5 and 145.")
+        elif K < 5 or K > 205:
+            st.sidebar.error("Potassium (K) value must be between 5 and 205.")
+        elif temperature < 2 or temperature > 44:
+            st.sidebar.error("Temperature value must be between 2°C and 44°C.")
+        elif humidity < 14 or humidity > 100:
+            st.sidebar.error("Humidity value must be between 14% and 100%.")
+        elif ph < 3.5 or ph > 10:
+            st.sidebar.error("pH value must be between 3.5 and 10.")
+        elif rainfall < 20 or rainfall > 300:
+            st.sidebar.error("Rainfall value must be between 20 mm and 300 mm.")
         else:
-            st.error("Failed to get prediction from server.")
+            # Send HTTP request to FastAPI server
+            response = requests.post("http://34.170.154.42/predict",
+                                     params={"N": N, "P": P, "K": K,
+                                             "temperature": temperature,
+                                             "humidity": humidity, "ph": ph,
+                                             "rainfall": rainfall})
+            if response.status_code == 200:
+                predicted_yield = response.json()["prediction"]
+                # Map predicted label to crop name
+                predicted_crop = crop_names.get(predicted_yield)
+                if predicted_crop is not None:
+                   st.markdown(f'<div class="predicted-crop" style="font-size: 36px; color: #FF5733; font-weight: bold;">{predicted_crop}</div>', unsafe_allow_html=True)
+                   st.markdown(f'<div class="crop-description" style="font-size: 18px;">{crop_info.get(predicted_crop, "No additional information available.")}</div>', unsafe_allow_html=True)
+
+                else:
+                    st.error("Failed to map prediction to crop name.")
+            else:
+                st.error("Failed to get prediction from server.")
 
 if __name__ == '__main__':
     main()
